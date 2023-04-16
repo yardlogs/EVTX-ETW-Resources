@@ -4,6 +4,7 @@ import os
 import csvtomd
 import csv
 import pandas as pd
+import re
 
 # This is a special version related to generating STATS
 def convertCsvToMDStats(folderName, windowsName, version, edition, date, build):
@@ -31,8 +32,8 @@ def fixMessage(message, template):
     for e in parsedTemplate:
         listOfTemplateAttributes.append(e.attrib['name'])
     
-    for i in range(len(listOfTemplateAttributes)-1):
-        message = message.replace("%"+str(i+1), "{" + listOfTemplateAttributes[i+1] + "}")
+    for i in range(1, len(listOfTemplateAttributes)):
+        message = re.sub("%"+str(i)+"([^\d]|$)",  "{" + listOfTemplateAttributes[i] + "}\\1", message)
     
     return message
 
